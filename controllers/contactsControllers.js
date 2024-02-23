@@ -59,7 +59,7 @@ export const updateContact = async (req, res, next) => {
     const { id } = req.params;
     const result = await editContact(id, req.body);
     if (!result) throw HttpError(404);
-    res.status(201).json(result);
+    res.json(result);
   } catch (error) {
     next(error);
   }
