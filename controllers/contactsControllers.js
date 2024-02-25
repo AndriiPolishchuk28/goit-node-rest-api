@@ -1,9 +1,5 @@
 import contactsService from "../services/contactsServices.js";
 import HttpError from "../helpers/HttpError.js";
-import {
-  createContactSchema,
-  updateContactSchema,
-} from "../schemas/contactsSchemas.js";
 
 const { listContacts, getContactById, addContact, editContact, removeContact } =
   contactsService;
@@ -54,6 +50,7 @@ export const updateContact = async (req, res, next) => {
   try {
     const { id } = req.params;
     const result = await editContact(id, req.body);
+    console.log(result);
     if (!result) throw HttpError(404);
     if (Object.keys(req.body).length === 0)
       throw HttpError(400, "Body must have at least one field");

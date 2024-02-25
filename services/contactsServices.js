@@ -39,7 +39,7 @@ export const editContact = async (id, data) => {
   const contacts = await listContacts();
   const index = contacts.findIndex((item) => item.id === id);
   if (index === -1) return null;
-  contacts[index] = { id, ...data };
+  contacts[index] = { ...contacts[index], ...data };
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return contacts[index];
 };
