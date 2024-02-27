@@ -1,8 +1,21 @@
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
-
+import mongoose from "mongoose";
 import contactsRouter from "./routes/contactsRouter.js";
+
+const DB_HOST =
+  "mongodb+srv://ipolishchuk94:ihor1967@contacts.dgjkcs7.mongodb.net/db-contacts";
+mongoose
+  .connect(DB_HOST)
+  .then(() => {
+    app.listen(3000);
+    console.log("ok");
+  })
+  .catch((error) => {
+    console.log(error.message);
+    process.exit(1);
+  });
 
 const app = express();
 
@@ -21,6 +34,6 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message });
 });
 
-app.listen(4000, () => {
-  console.log("Server is running. Use our API on port: 4000");
-});
+// app.listen(4000, () => {
+//   console.log("Server is running. Use our API on port: 4000");
+// });
