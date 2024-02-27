@@ -3,9 +3,8 @@ import morgan from "morgan";
 import cors from "cors";
 import mongoose from "mongoose";
 import contactsRouter from "./routes/contactsRouter.js";
+import { DB_HOST } from "./config.js";
 
-const DB_HOST =
-  "mongodb+srv://ipolishchuk94:ihor1967@contacts.dgjkcs7.mongodb.net/db-contacts";
 mongoose
   .connect(DB_HOST)
   .then(() => {
