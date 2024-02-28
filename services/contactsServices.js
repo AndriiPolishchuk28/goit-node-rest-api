@@ -1,6 +1,7 @@
 import fs from "fs/promises";
 import path from "path";
 import { nanoid } from "nanoid";
+// import { Contact } from "../models/contact";
 
 export const contactsPath = path.resolve("db", "contacts.json");
 
