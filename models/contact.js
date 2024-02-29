@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import handleMongooseError from "../helpers/handleMongooseError.js";
 
 const contactSchema = new Schema({
   name: {
@@ -11,10 +12,12 @@ const contactSchema = new Schema({
   phone: {
     type: String,
   },
-  favorite: {
+  favourite: {
     type: Boolean,
     default: false,
   },
 });
+
+contactSchema.post("save", handleMongooseError);
 
 export const Contact = model("contacts", contactSchema);
