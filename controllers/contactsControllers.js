@@ -18,7 +18,8 @@ const getOneContact = async (req, res) => {
 
 const deleteContact = async (req, res) => {
   const { id } = req.params;
-  const result = await Contact.deleteOne({ _id: id });
+  const result = await Contact.findByIdAndDelete(id);
+  console.log(result);
   if (!result) throw HttpError(404);
   res.json(result);
 };
