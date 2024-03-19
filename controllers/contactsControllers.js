@@ -12,7 +12,6 @@ const getAllContacts = async (req, res) => {
   if (favourite) {
     query.favourite = favourite;
   }
-  console.log(query);
 
   const result = await contacts.getAll(query, { skip, limit, favourite });
   res.json(result);
@@ -30,7 +29,8 @@ const getOneContact = async (req, res) => {
 
 const deleteContact = async (req, res) => {
   const { id } = req.params;
-  const result = await contacts.deleteContact(id);
+  const { _id: owner } = req.user;
+  const result = await contacts.deleteContact({ _id: id, owner });
   if (!result) throw HttpError(404);
   res.json(result);
 };
@@ -43,7 +43,8 @@ const createContact = async (req, res) => {
 
 const updateContact = async (req, res) => {
   const { id } = req.params;
-  const result = await contacts.updateContact(id, req.body);
+  const { _id: owner } = req.user;
+  const result = await contacts.updateContact({ _id: id, owner }, req.body);
   if (!result) throw HttpError(404);
   if (Object.keys(req.body).length === 0)
     throw HttpError(400, "Body must have at least one field");
@@ -52,7 +53,8 @@ const updateContact = async (req, res) => {
 
 const updateFavourite = async (req, res) => {
   const { id } = req.params;
-  const result = await contacts.updateContact(id, req.body);
+  const { _id: owner } = req.user;
+  const result = await contacts.updateContact({ _id: id, owner }, req.body);
   if (!result) throw HttpError(404);
   if (Object.keys(req.body).length === 0)
     throw HttpError(400, "Body must have at least one field");

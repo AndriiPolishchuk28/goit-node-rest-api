@@ -15,8 +15,10 @@ const signUpUser = async (req, res) => {
   const newUser = await userServices.signUp(req.body);
 
   res.status(201).json({
-    email: newUser.email,
-    subscription: newUser.subscription,
+    user: {
+      email: newUser.email,
+      subscription: newUser.subscription,
+    },
   });
 };
 
@@ -64,9 +66,7 @@ const getCurrent = async (req, res) => {
 const signOut = async (req, res) => {
   const { _id } = req.user;
   await userServices.updateUser({ _id }, { token: "" });
-  res.json({
-    message: "signout success",
-  });
+  res.status(204).send();
 };
 
 const updateSubscription = async (req, res) => {

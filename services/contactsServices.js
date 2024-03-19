@@ -5,8 +5,9 @@ export const getAll = (filter = {}, query = {}) =>
 
 export const getOneContact = (filter) => Contact.findOne(filter);
 
-export const deleteContact = (id) => Contact.findByIdAndDelete(id);
+export const deleteContact = (filter) => Contact.findOneAndDelete(filter);
 
 export const createContact = (data) => Contact.create(data);
 
-export const updateContact = (id, data) => Contact.findByIdAndUpdate(id, data);
+export const updateContact = (filter, data) =>
+  Contact.findOneAndUpdate(filter, data);
