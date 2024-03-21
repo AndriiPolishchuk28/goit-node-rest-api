@@ -5,6 +5,7 @@ import * as schema from "../schemas/contactsSchemas.js";
 import ctrl from "../controllers/contactsControllers.js";
 import isValidId from "../middlewares/isValidId.js";
 import authenticate from "../middlewares/authenticate.js";
+import upload from "../middlewares/upload.js";
 
 const contactsRouter = express.Router();
 contactsRouter.use(authenticate);
@@ -15,9 +16,13 @@ contactsRouter.get("/:id", isValidId, ctrl.getOneContact);
 
 contactsRouter.delete("/:id", isValidId, ctrl.deleteContact);
 
+// upload.array('poster', 8)
+// upload.fields([{name: 'poster', maxCount: 1}])
+
 contactsRouter.post(
   "/",
-  validateBody(schema.createContactSchema),
+  upload.single("poster"),
+  // validateBody(schema.createContactSchema),
   ctrl.createContact
 );
 

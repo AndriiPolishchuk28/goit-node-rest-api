@@ -1,7 +1,11 @@
 import * as contacts from "../services/contactsServices.js";
 import HttpError from "../helpers/HttpError.js";
 import ctrlWrapper from "../helpers/ctrlWrapper.js";
-import { Contact } from "../models/contact.js";
+import fs from "fs/promises";
+import path from "path";
+import cloudinary from "../helpers/cloudinary.js";
+
+const postersPath = path.resolve("public", "posters");
 
 const getAllContacts = async (req, res) => {
   const { _id: owner } = req.user;
@@ -37,7 +41,17 @@ const deleteContact = async (req, res) => {
 
 const createContact = async (req, res) => {
   const { _id: owner } = req.user;
-  const result = await contacts.createContact({ ...req.body, owner });
+  const { path: oldPath, filename } = req.file;
+  const { url: poster } = await cloudinary.uploader.upload(req.file.path, {
+    folder: "posters",
+  });
+  await fs.unlink(req.file.path);
+
+  // const newPath = path.join(postersPath, filename);
+  // await fs.rename(oldPath, newPath);
+  // const poster = path.join("posters", filename);
+
+  const result = await contacts.createContact({ ...req.body, poster, owner });
   res.status(201).json(result);
 };
 
