@@ -1,8 +1,14 @@
+import fs from "fs/promises";
+import path from "path";
 import ctrlWrapper from "../helpers/ctrlWrapper.js";
 import HttpError from "../helpers/HttpError.js";
 import * as userServices from "../services/authServices.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv/config";
+import gravatar from "gravatar";
+import Jimp from "jimp";
+
+const avatarPath = path.resolve("public", "avatars");
 
 const { SECRET_KEY } = process.env;
 
@@ -12,7 +18,8 @@ const signUpUser = async (req, res) => {
   if (user) {
     throw HttpError(409, "Email already in use");
   }
-  const newUser = await userServices.signUp(req.body);
+  const avatar = gravatar.url(email, { s: "200", r: "pg", d: "404" });
+  const newUser = await userServices.signUp({ ...req.body, avatarURL: avatar });
 
   res.status(201).json({
     user: {
@@ -78,10 +85,27 @@ const updateSubscription = async (req, res) => {
   });
 };
 
+const updateAvatars = async (req, res) => {
+  const { path: oldPath, filename } = req.file;
+  const { _id } = req.user;
+  const newPath = path.join(avatarPath, filename);
+
+  const resizedAvatar = await Jimp.read(oldPath);
+  await resizedAvatar.resize(250, 250).write(oldPath);
+
+  await fs.rename(oldPath, newPath);
+  const avatar = path.join("avatars", filename);
+  await userServices.updateUser({ _id }, { avatarURL: avatar });
+  res.json({
+    avatarURL: avatar,
+  });
+};
+
 export default {
   signUpUser: ctrlWrapper(signUpUser),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   signOut: ctrlWrapper(signOut),
   updateSubscription: ctrlWrapper(updateSubscription),
+  updateAvatars: ctrlWrapper(updateAvatars),
 };

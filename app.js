@@ -10,22 +10,12 @@ dotenv.config();
 
 const { DB_HOST, PORT } = process.env;
 
-mongoose
-  .connect(DB_HOST)
-  .then(() => {
-    app.listen(PORT);
-    console.log("Mongodb connected");
-  })
-  .catch((error) => {
-    console.log(error.message);
-    process.exit(1);
-  });
-
 const app = express();
 
 app.use(morgan("tiny"));
 app.use(cors());
 app.use(express.json());
+app.use(express.static("public"));
 
 app.use("/api/contacts", contactsRouter);
 app.use("/api/users", usersRouter);
@@ -38,3 +28,16 @@ app.use((err, req, res, next) => {
   const { status = 500, message = "Server error" } = err;
   res.status(status).json({ message });
 });
+
+mongoose
+  .connect(DB_HOST)
+  .then(() => {
+    app.listen(PORT);
+    console.log("Mongodb connected");
+  })
+  .catch((error) => {
+    console.log(error.message);
+    process.exit(1);
+  });
+
+export default app;
