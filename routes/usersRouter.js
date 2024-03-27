@@ -13,6 +13,12 @@ usersRouter.post(
   ctrl.signUpUser
 );
 
+usersRouter.get("/verify/:verificationToken", ctrl.verify);
+usersRouter.post(
+  "/verify",
+  validateBody(schemas.userEmailSchema),
+  ctrl.resendVerify
+);
 usersRouter.post("/login", validateBody(schemas.signInSchema), ctrl.login);
 usersRouter.get("/current", authenticate, ctrl.getCurrent);
 usersRouter.post("/logout", authenticate, ctrl.signOut);
