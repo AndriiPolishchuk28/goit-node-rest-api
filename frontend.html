@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <ul id="message-list"></ul>
+    <script>
+      const messageList = document.getElementById("message-list");
+      const ws = new WebSocket("ws://localhost:4000");
+      ws.onopen = () => {
+        messageList.insertAdjacentHTML("beforeend", "<li>hi</li>");
+      };
+      ws.onmessage = (event) => {
+        messageList.insertAdjacentHTML("beforeend", `<li>${event.data}</li>`);
+      };
+    </script>
+  </body>
+</html>

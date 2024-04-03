@@ -32,7 +32,7 @@ app.use((err, req, res, next) => {
 mongoose
   .connect(DB_HOST)
   .then(() => {
-    app.listen(PORT);
+    app.listen(5000);
     console.log("Mongodb connected");
   })
   .catch((error) => {
@@ -41,3 +41,15 @@ mongoose
   });
 
 export default app;
+
+// const socketList = [];
+
+// import { WebSocketServer } from "ws";
+// const wsServer = new WebSocketServer({ port: 4000 });
+// wsServer.on("connection", (socket) => {
+//   setTimeout(() => socket.send("welcome to ws server"), 3000);
+//   socketList.forEach((item) =>
+//     item.send(`now we have ${socketList.length + 1} members`)
+//   );
+//   socketList.push(socket);
+// });

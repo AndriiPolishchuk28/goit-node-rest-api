@@ -9,7 +9,7 @@ export const signUp = async (data) => {
 };
 
 export const validatePassword = async (password, hashPassword) => {
-  return bcrypt.compare(password, hashPassword);
+  return await bcrypt.compare(password, hashPassword);
 };
 
 export const updateUser = (filter, data) => User.findOneAndUpdate(filter, data);
